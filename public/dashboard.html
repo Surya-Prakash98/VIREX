@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - VIREX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="nav-brand" style="display: flex; align-items: center; gap: 8px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <line x1="9" y1="1" x2="9" y2="4"></line>
+                    <line x1="15" y1="1" x2="15" y2="4"></line>
+                    <line x1="9" y1="20" x2="9" y2="23"></line>
+                    <line x1="15" y1="20" x2="15" y2="23"></line>
+                    <line x1="20" y1="9" x2="23" y2="9"></line>
+                    <line x1="20" y1="14" x2="23" y2="14"></line>
+                    <line x1="1" y1="9" x2="4" y2="9"></line>
+                    <line x1="1" y1="14" x2="4" y2="14"></line>
+                </svg>
+                VIREX
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Browse</a></li>
+                <li><a href="dashboard.html" class="active">Request Board</a></li>
+                <li id="authNav"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- WELCOME & SUMMARY -->
+        <div style="margin-bottom: 2rem;">
+            <h1 id="welcomeHeading">Dashboard</h1>
+            <p style="color: var(--text-muted);">Manage your listed electronics, track your rental requests, and handle customer bookings.</p>
+        </div>
+
+        <div class="stat-cards">
+            <div class="stat-card">
+                <div class="stat-num" id="statMyListings">0</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem;">My Listings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statMyRentals">0</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem;">My Rentals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statPendingRequests">0</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Pending Requests</div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tabListings">My Listings</button>
+            <button class="tab-btn" data-tab="tabRentals">My Rentals & Purchases</button>
+            <button class="tab-btn" data-tab="tabRequests">Requests On My Items</button>
+        </div>
+
+        <!-- TAB 1: MY LISTINGS -->
+        <div class="tab-content active" id="tabListings">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>My Electronics Listings</h2>
+                <button id="toggleAddListingBtn" class="btn btn-primary">+ Add New Listing</button>
+            </div>
+
+            <!-- ADD LISTING FORM CARD -->
+            <div id="addListingFormCard" class="form-card" style="display: none; max-width: 650px; margin: 0 0 2rem 0;">
+                <h3 style="margin-bottom: 1rem;">Post a New Electronics Listing</h3>
+                <div id="addListingAlert"></div>
+
+                <form id="addListingForm" novalidate>
+                    <div class="form-group">
+                        <label for="title">Title / Device Name</label>
+                        <input type="text" id="title" class="form-control" placeholder="e.g. Dell XPS 15 32GB RAM">
+                        <span class="error-text" id="titleErr"></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" class="form-control">
+                                <option value="Laptop">Laptop</option>
+                                <option value="Phone">Phone</option>
+                                <option value="Camera">Camera</option>
+                                <option value="Console">Console</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span class="error-text" id="categoryErr"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="condition">Condition</label>
+                            <select id="condition" class="form-control">
+                                <option value="Like New">Like New</option>
+                                <option value="Excellent">Excellent</option>
+                                <option value="Good">Good</option>
+                                <option value="Fair">Fair</option>
+                            </select>
+                            <span class="error-text" id="conditionErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" class="form-control" rows="3" placeholder="Provide details like specs, included accessories, condition notes..."></textarea>
+                        <span class="error-text" id="descriptionErr"></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input list="cityOptions" id="city" class="form-control" placeholder="Type or select your city...">
+                            <datalist id="cityOptions">
+                                <option value="Mumbai">
+                                <option value="Delhi">
+                                <option value="Bangalore">
+                                <option value="Pune">
+                            </datalist>
+                            <span class="error-text" id="cityErr"></span>
+                        </div>
+                        
+                        <div class="form-group" id="rentPriceGroup">
+                            <label for="rentPricePerDay">Rent Price (₹/day)</label>
+                            <input type="number" id="rentPricePerDay" class="form-control" placeholder="1000">
+                            <span class="error-text" id="rentPriceErr"></span>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="deposit">Deposit (₹)</label>
+                            <input type="number" id="deposit" class="form-control" placeholder="3000">
+                            <span class="error-text" id="depositErr"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageFile">Listing Image</label>
+                            <input type="file" id="imageFile" class="form-control" accept="image/*">
+                            <span class="error-text" id="imageFileErr"></span>
+                            <input type="hidden" id="imageUrl">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button type="submit" id="addListingSubmitBtn" class="btn btn-primary" style="flex:1;">Submit Listing</button>
+                        <button type="button" id="cancelAddListingBtn" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- MY LISTINGS GRID -->
+            <div id="myListingsStatus"></div>
+            <div class="grid" id="myListingsGrid"></div>
+        </div>
+
+        <!-- TAB 2: MY RENTALS & PURCHASES -->
+        <div class="tab-content" id="tabRentals">
+            <h2 style="margin-bottom: 1rem;">My Rentals & Purchases</h2>
+            <div id="myRentalsStatus"></div>
+            <div id="myRentalsList"></div>
+        </div>
+
+        <!-- TAB 3: REQUESTS ON MY ITEMS -->
+        <div class="tab-content" id="tabRequests">
+            <h2 style="margin-bottom: 1rem;">Requests On My Items</h2>
+            <div id="myRequestsStatus"></div>
+            <div id="myRequestsList"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 VIREX Electronics Marketplace. All rights reserved.</p>
+    </footer>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
